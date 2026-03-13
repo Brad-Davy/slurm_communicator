@@ -1,5 +1,5 @@
-from slurm_comunicator.comunicator import SlurmComms
-from slurm_comunicator.utils import *
+from slurm_communicator.communicator import SlurmComms
+from slurm_communicator.utils import *
 import numpy as np
 import shutil
 from datetime import date
