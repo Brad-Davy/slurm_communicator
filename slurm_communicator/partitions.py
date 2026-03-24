@@ -62,7 +62,7 @@ class Partition:
             stderr=subprocess.PIPE,
             text=True,
         ).stdout
-        
+
         split_raw_output = raw_data.splitlines()
         return [line for line in split_raw_output if "NODELIST" not in line]
 

@@ -19,9 +19,11 @@ if __name__ == "__main__":
 
     sacct_status = sacct_is_present()
     sinfo_status = sinfo_is_present()
-    
+    slurmctld_status = is_process_running("slurmctld")
+    slurmdbd_status = is_process_running("slurmdbd")
+
     ## Check the slurm commands are present ##
-    if sacct_status == True and sinfo_status == True:
+    if sacct_status and sinfo_status and slurmctld_status and slurmdbd_status:
 
         terminal_width = shutil.get_terminal_size().columns
         terminal_height = shutil.get_terminal_size().lines
@@ -40,7 +42,9 @@ if __name__ == "__main__":
 
         partition_dictionary_n_cores = comms.get_n_cores_partition_dictionary()
         partition_dictionary_n_jobs = comms.get_n_jobs_partition_dictionary()
-        partition_dictionary_wait_times = comms.get_average_wait_time_partition_dictionary()
+        partition_dictionary_wait_times = (
+            comms.get_average_wait_time_partition_dictionary()
+        )
         queue_length_dictionary = comms.get_queue_length_partition_dictionary()
 
         total_cores_in_use = comms.total_cores_in_use
@@ -49,8 +53,12 @@ if __name__ == "__main__":
         manage_csv_file(
             [partition_dictionary_n_cores], f"number_of_cores-{date.today()}.csv"
         )
-        manage_csv_file([partition_dictionary_n_jobs], f"number_of_jobs-{date.today()}.csv")
-        manage_csv_file([partition_dictionary_wait_times], f"wait_times-{date.today()}.csv")
+        manage_csv_file(
+            [partition_dictionary_n_jobs], f"number_of_jobs-{date.today()}.csv"
+        )
+        manage_csv_file(
+            [partition_dictionary_wait_times], f"wait_times-{date.today()}.csv"
+        )
         manage_csv_file([queue_length_dictionary], f"jobs_pending-{date.today()}.csv")
 
         print("-" * int(0.7 * terminal_width))
@@ -73,4 +81,10 @@ if __name__ == "__main__":
             f'There are {global_quantities["jobs_running_in_the_queue"]} jobs running in the queue.'
         )
     else:
-        print(f"Slurm commands status: sinfo -> {sinfo_status}, sacct: -> {sacct_status}")
+        print(
+            f"Slurm commands status: sinfo -> {sinfo_status}, sacct: -> {sacct_status}"
+        )
+
+        print(
+            f"Slurm dameons status: slurmctld -> {slurmctld_status}, slurmdbd: -> {slurmdbd_status}"
+        )

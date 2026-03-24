@@ -31,9 +31,11 @@ def create_csv_file(data: dict, csv_file_path: str) -> None:
     df = pd.DataFrame(data)
     df.to_csv(csv_file_path, index=False)
 
+
 def append_csv_file(data: dict, csv_file_path: str) -> None:
     df = pd.DataFrame(data)
     df.to_csv(csv_file_path, mode="a", header=False, index=False)
+
 
 def print_csv_file(file_names: list[str]) -> None:
 
